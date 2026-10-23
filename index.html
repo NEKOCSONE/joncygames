@@ -12,53 +12,51 @@
         p { color: #aaa; }
         #player { width: 100%; height: 100%; }
     </style>
-    <!-- CORREGIDO: Cargamos Ruffle correctamente desde un servidor seguro -->
-    <script src="https://unpkg.com"></script>
+    <!-- USAMOS TU ARCHIVO LOCAL: Cargamos el ruffle.js que tienes subido en tu carpeta -->
+    <script src="ruffle.js"></script>
 </head>
 <body>
 
     <h1>🎮 Joncy Games 🎮</h1>
     <p>Selecciona un juego de la lista para empezar a jugar al instante:</p>
 
-    <!-- MENÚ PARA CAMBIAR DE JUEGO -->
+    <!-- MENÚ CON LOS NOMBRES CORREGIDOS -->
     <select id="menuJuegos" class="selector" onchange="cambiarJuego()">
         <option value="">Selecciona un juego de la lista...</option>
-        <option value="my_new_room_2.swf">My New Room 2</option>
-        <option value="Road_of_the_dead_DesbloqueoPorEmanuel.swf">Road of the Dead</option>
-        <option value="SilentWhisper.swf">SilentWhisper</option>
+        <option value="mynewroom.swf">My New Room 2</option>
+        <option value="roadofdead.swf">Road of the Dead</option>
+        <option value="silentwhisper.swf">SilentWhisper</option>
     </select>
 
-    <!-- CORREGIDO: Contenedor moderno compatible con Ruffle (Adiós al embed roto) -->
     <div class="contenedor-juego">
         <div id="player"></div>
     </div>
 
     <script>
-    const ruffle = window.RufflePlayer.newest();
-    const player = ruffle.createPlayer();
-    const container = document.getElementById("player");
-    container.appendChild(player);
+        // Inicialización usando tu Ruffle local
+        const ruffle = window.RufflePlayer.newest();
+        const player = ruffle.createPlayer();
+        const container = document.getElementById("player");
+        container.appendChild(player);
 
-    // Ajustes para que Ruffle se adapte mejor y muestre controles
-    player.style.width = "100%";
-    player.style.height = "100%";
+        player.style.width = "100%";
+        player.style.height = "100%";
 
-    function cambiarJuego() {
-        var lista = document.getElementById("menuJuegos");
-        var juegoSeleccionado = lista.options[lista.selectedIndex].value;
-        
-        if (juegoSeleccionado !== "") {
-            console.log("Intentando cargar: " + juegoSeleccionado);
-            player.load({
-                url: juegoSeleccionado,
-                allowScriptAccess: true,
-                autoplay: "on" // Forzamos a que intente arrancar solo
-            });
+        function cambiarJuego() {
+            var lista = document.getElementById("menuJuegos");
+            var juegoSeleccionado = lista.options[lista.selectedIndex].value;
+            
+            if (juegoSeleccionado !== "") {
+                player.load({
+                    url: juegoSeleccionado,
+                    allowScriptAccess: true,
+                    autoplay: "on"
+                });
+            }
         }
-    }
-</script>
-
+    </script>
 
 </body>
 </html>
+
 
