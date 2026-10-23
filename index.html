@@ -10,8 +10,9 @@
         .selector { margin: 20px auto; padding: 10px; font-size: 16px; background: #333; color: #fff; border: 2px solid #ffcc00; border-radius: 5px; cursor: pointer; }
         .contenedor-juego { margin: 20px auto; width: 800px; height: 600px; background: #000; border: 4px solid #333; border-radius: 8px; box-shadow: 0px 0px 20px rgba(0,0,0,0.7); max-width: 100%; }
         p { color: #aaa; }
+        #player { width: 100%; height: 100%; }
     </style>
-    <!-- Cargamos Ruffle automáticamente desde un servidor seguro -->
+    <!-- CORREGIDO: Cargamos Ruffle correctamente desde un servidor seguro -->
     <script src="https://unpkg.com"></script>
 </head>
 <body>
@@ -21,28 +22,38 @@
 
     <!-- MENÚ PARA CAMBIAR DE JUEGO -->
     <select id="menuJuegos" class="selector" onchange="cambiarJuego()">
-        <!-- Reemplaza los valores de abajo con los nombres exactos de tus archivos .swf -->
-        <option value="my_new_room_2.swf">Selecciona un juego...</option>
-        <option value="my_new_room_2.swf">my new room 2</option>
+        <option value="">Selecciona un juego de la lista...</option>
+        <option value="my_new_room_2.swf">My New Room 2</option>
         <option value="Road_of_the_dead_DesbloqueoPorEmanuel.swf">Road of the Dead</option>
         <option value="SilentWhisper.swf">SilentWhisper</option>
     </select>
 
-    <!-- CONTENEDOR DONDE SE EJECUTA RUFFLE -->
+    <!-- CORREGIDO: Contenedor moderno compatible con Ruffle (Adiós al embed roto) -->
     <div class="contenedor-juego">
-        <embed id="pantallaFlash" src="" width="100%" height="100%">
+        <div id="player"></div>
     </div>
 
     <script>
+        // Inicializamos el emulador Ruffle en el contenedor
+        const ruffle = window.RufflePlayer.newest();
+        const player = ruffle.createPlayer();
+        const container = document.getElementById("player");
+        container.appendChild(player);
+
         function cambiarJuego() {
             var lista = document.getElementById("menuJuegos");
             var juegoSeleccionado = lista.options[lista.selectedIndex].value;
-            var embed = document.getElementById("pantallaFlash");
             
-            // Recargamos el embed con el nuevo juego seleccionado
-            embed.src = juegoSeleccionado;
+            if (juegoSeleccionado !== "") {
+                // Ruffle carga el juego directamente sin interferencia del navegador
+                player.load({
+                    url: juegoSeleccionado,
+                    allowScriptAccess: true
+                });
+            }
         }
     </script>
 
 </body>
 </html>
+
