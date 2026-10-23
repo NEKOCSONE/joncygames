@@ -5,12 +5,60 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mi Colección de Juegos Flash</title>
     <style>
-        body { font-family: 'Segoe UI', Arial, sans-serif; text-align: center; background-color: #1a1a1a; color: #fff; margin: 0; padding: 20px; }
-        h1 { color: #ffcc00; text-shadow: 2px 2px 4px #000; }
-        .selector { margin: 20px auto; padding: 10px; font-size: 16px; background: #333; color: #fff; border: 2px solid #ffcc00; border-radius: 5px; cursor: pointer; }
-        .contenedor-juego { margin: 20px auto; width: 800px; height: 600px; background: #000; border: 4px solid #333; border-radius: 8px; box-shadow: 0px 0px 20px rgba(0,0,0,0.7); max-width: 100%; }
-        p { color: #aaa; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; text-align: center; background-color: #1a1a1a; color: #fff; margin: 0; padding: 20px; user-select: none; }
+        h1 { color: #ffcc00; text-shadow: 2px 2px 4px #000; margin-bottom: 5px; }
+        .selector { margin: 15px auto; padding: 10px; font-size: 16px; background: #333; color: #fff; border: 2px solid #ffcc00; border-radius: 5px; cursor: pointer; }
+        .contenedor-juego { margin: 15px auto; width: 800px; height: 600px; background: #000; border: 4px solid #333; border-radius: 8px; box-shadow: 0px 0px 20px rgba(0,0,0,0.7); max-width: 100%; }
+        p { color: #aaa; margin: 5px 0; }
         #player { width: 100%; height: 100%; }
+
+        /* Controles Táctiles Adaptables */
+        .controles-movil {
+            display: none; /* Por defecto ocultos en PC */
+            max-width: 500px;
+            margin: 20px auto;
+            justify-content: space-around;
+            gap: 15px;
+        }
+
+        /* Se activan solo en pantallas táctiles o celulares */
+        @media (pointer: coarse), (max-width: 768px) {
+            .controles-movil { display: flex; }
+        }
+
+        .cruceta { display: grid; grid-template-columns: repeat(3, 60px); grid-template-rows: repeat(3, 60px); gap: 5px; }
+        .botones-accion { display: flex; flex-direction: column; justify-content: center; gap: 10px; }
+
+        .btn-gamepad {
+            background: #333;
+            color: #ffcc00;
+            border: 2px solid #ffcc00;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            touch-action: manipulation;
+            box-shadow: 0 4px #222;
+        }
+        .btn-gamepad:active {
+            transform: translateY(3px);
+            box-shadow: 0 1px #222;
+            background: #ffcc00;
+            color: #222;
+        }
+
+        /* Posiciones de las flechas en la cuadrícula */
+        .b-arriba { grid-column: 2; grid-row: 1; }
+        .b-izquierda { grid-column: 1; grid-row: 2; }
+        .b-derecha { grid-column: 3; grid-row: 2; }
+        .b-abajo { grid-column: 2; grid-row: 3; }
+
+        /* Botón de espacio o acción */
+        .b-espacio { width: 120px; height: 60px; font-size: 14px; }
+        .b-enter { width: 120px; height: 45px; font-size: 14px; }
     </style>
     <!-- USAMOS TU ARCHIVO LOCAL: Cargamos el ruffle.js que tienes subido en tu carpeta -->
     <script src="ruffle.js"></script>
@@ -35,6 +83,23 @@
         <div id="player"></div>
     </div>
 
+    <!-- CONTROLES VIRTUALES PARA MÓVIL -->
+    <div class="controles-movil">
+        <!-- Dirección (Flechas) -->
+        <div class="cruceta">
+            <button class="btn-gamepad b-arriba" onpointerdown="simularTecla('ArrowUp')" onpointerup="soltarTecla('ArrowUp')" onpointerleave="soltarTecla('ArrowUp')">▲</button>
+            <button class="btn-gamepad b-izquierda" onpointerdown="simularTecla('ArrowLeft')" onpointerup="soltarTecla('ArrowLeft')" onpointerleave="soltarTecla('ArrowLeft')">◀</button>
+            <button class="btn-gamepad b-derecha" onpointerdown="simularTecla('ArrowRight')" onpointerup="soltarTecla('ArrowRight')" onpointerleave="soltarTecla('ArrowRight')">▶</button>
+            <button class="btn-gamepad b-abajo" onpointerdown="simularTecla('ArrowDown')" onpointerup="soltarTecla('ArrowDown')" onpointerleave="soltarTecla('ArrowDown')">▼</button>
+        </div>
+        
+        <!-- Botones de Acción -->
+        <div class="botones-accion">
+            <button class="btn-gamepad b-espacio" onpointerdown="simularTecla(' ')" onpointerup="soltarTecla(' ')" onpointerleave="soltarTecla(' ')">ESPACIO</button>
+            <button class="btn-gamepad b-enter" onpointerdown="simularTecla('Enter')" onpointerup="soltarTecla('Enter')" onpointerleave="soltarTecla('Enter')">ENTER</button>
+        </div>
+    </div>
+
     <script>
         // Inicialización usando tu Ruffle local
         const ruffle = window.RufflePlayer.newest();
@@ -57,9 +122,16 @@
                 });
             }
         }
+
+        // Sistema para mandar las teclas al emulador Ruffle
+        function simularTecla(tecla) {
+            window.dispatchEvent(new KeyboardEvent('keydown', { key: tecla, bubbles: true }));
+        }
+
+        function soltarTecla(tecla) {
+            window.dispatchEvent(new KeyboardEvent('keyup', { key: tecla, bubbles: true }));
+        }
     </script>
 
 </body>
 </html>
-
-
