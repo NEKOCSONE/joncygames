@@ -17,7 +17,7 @@
 </head>
 <body>
 
-    <h1>🎮 Mi Portal de Juegos Flash 🎮</h1>
+    <h1>🎮 Joncy Games 🎮</h1>
     <p>Selecciona un juego de la lista para empezar a jugar al instante:</p>
 
     <!-- MENÚ PARA CAMBIAR DE JUEGO -->
@@ -34,25 +34,30 @@
     </div>
 
     <script>
-        // Inicializamos el emulador Ruffle en el contenedor
-        const ruffle = window.RufflePlayer.newest();
-        const player = ruffle.createPlayer();
-        const container = document.getElementById("player");
-        container.appendChild(player);
+    const ruffle = window.RufflePlayer.newest();
+    const player = ruffle.createPlayer();
+    const container = document.getElementById("player");
+    container.appendChild(player);
 
-        function cambiarJuego() {
-            var lista = document.getElementById("menuJuegos");
-            var juegoSeleccionado = lista.options[lista.selectedIndex].value;
-            
-            if (juegoSeleccionado !== "") {
-                // Ruffle carga el juego directamente sin interferencia del navegador
-                player.load({
-                    url: juegoSeleccionado,
-                    allowScriptAccess: true
-                });
-            }
+    // Ajustes para que Ruffle se adapte mejor y muestre controles
+    player.style.width = "100%";
+    player.style.height = "100%";
+
+    function cambiarJuego() {
+        var lista = document.getElementById("menuJuegos");
+        var juegoSeleccionado = lista.options[lista.selectedIndex].value;
+        
+        if (juegoSeleccionado !== "") {
+            console.log("Intentando cargar: " + juegoSeleccionado);
+            player.load({
+                url: juegoSeleccionado,
+                allowScriptAccess: true,
+                autoplay: "on" // Forzamos a que intente arrancar solo
+            });
         }
-    </script>
+    }
+</script>
+
 
 </body>
 </html>
